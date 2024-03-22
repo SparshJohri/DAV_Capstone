@@ -4,11 +4,13 @@ module assignmentOperator #(parameter WIDTH = 32)
 	output [WIDTH-1:0] original
 );
 
-	genvar i;
-	generate
-		for (i=0; i<WIDTH; i++) begin : ASSIGNMENT
-			assign recipient[i] = original[i];
-		end
-	endgenerate
-
+	/*always_comb
+	begin
+			for (int i=0; i<WIDTH; i++)
+			begin
+				assign recipient[i] = original[i];
+			end
+	end*/
+	//genvar i;
+	//assign recipient = new [WIDTH] (original);
 endmodule

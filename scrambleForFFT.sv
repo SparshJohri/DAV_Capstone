@@ -14,5 +14,4 @@ module scrambleForFFT #(parameter SAMPLES = 8, parameter WIDTH = 3)
 				);
         end
    endgenerate
-
 endmodule
