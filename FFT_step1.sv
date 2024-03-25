@@ -1,4 +1,4 @@
-module FFT_step1 #(parameter SAMPLES = 8, WIDTH = 3)
+module FFT_step1 #(parameter SAMPLES = 2, WIDTH = 3)
 (	
 	input [WIDTH-1:0] sampleInputs [SAMPLES-1:0],
 	output [$clog2(SAMPLES)-1:0] display_stream3 [SAMPLES-1:0],

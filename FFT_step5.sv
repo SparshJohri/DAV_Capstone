@@ -1,4 +1,4 @@
-module FFT_step2 #(parameter SAMPLES = 4, WIDTH = 3)
+module FFT_step5 #(parameter SAMPLES = 32, WIDTH = 3)
 (	
 	input [WIDTH-1:0] sampleInputs [SAMPLES-1:0],
 	output [$clog2(SAMPLES)-1:0] display_stream3 [SAMPLES-1:0],
@@ -17,7 +17,7 @@ module FFT_step2 #(parameter SAMPLES = 4, WIDTH = 3)
 	logic [$clog2(SAMPLES)-1:0] stage1;
 	
 	initial begin
-		stage1 = 1;
+		stage1 = 4;
 		l=0;
 		k=0;
 		for(i=0; i<((SAMPLES >> 1) >> stage1); i++)
