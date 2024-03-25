@@ -11,6 +11,10 @@ module FFT_step1_tb #(parameter SAMPLES = 8, WIDTH = 3)
 	logic [$clog2(SAMPLES)-1:0] newOrder2 [SAMPLES-1:0];
 	logic [$clog2(SAMPLES)-1:0] newOrder3 [SAMPLES-1:0];
 	
+	logic [WIDTH-1:0] display_stream1_1 [SAMPLES-1:0];
+	logic [WIDTH-1:0] display_stream2_1 [SAMPLES-1:0];
+	logic [WIDTH-1:0] display_stream3_1 [SAMPLES-1:0];
+	
 	
 	assign sampleInputs [0] = 0;
 	assign sampleInputs [1] = 1;
@@ -29,7 +33,7 @@ module FFT_step1_tb #(parameter SAMPLES = 8, WIDTH = 3)
 		);
 	
 	
-	FFT_step2 #(SAMPLES, WIDTH) tester2
+	/*FFT_step2 #(SAMPLES, WIDTH) tester2
 		(
 			.sampleInputs(sampleInputs),
 			.display_stream3(newOrder2),
@@ -41,6 +45,20 @@ module FFT_step1_tb #(parameter SAMPLES = 8, WIDTH = 3)
 			.sampleInputs(sampleInputs),
 			.display_stream3(newOrder3),
 			.display_stream(display_stream3)
-		);
+		);*/
+	
+	genvar i;
+	generate
+		for (i=0; i<SAMPLES; i=i+2) 
+		begin : GET_END_OF_STAGE
+			ButterflyUnit #(SAMPLES, WIDTH) butterfly
+			(
+				display_stream1[i],
+				display_stream1[i+1],
+				display_stream1_1[i],
+				display_stream1_1[i+1]
+			);
+		end
+	endgenerate
 		
 endmodule
