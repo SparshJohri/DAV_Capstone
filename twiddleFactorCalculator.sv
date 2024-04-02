@@ -153,6 +153,7 @@ lookupTableCosines[124] = (2**( (WIDTH/2) -1))*-0.995;
 lookupTableCosines[125] = (2**( (WIDTH/2) -1))*-0.997;
 lookupTableCosines[126] = (2**( (WIDTH/2) -1))*-0.998;
 lookupTableCosines[127] = (2**( (WIDTH/2) -1))*-0.999;
+
 lookupTableSines[0] = (2**( (WIDTH/2) -1))*0.0;
 lookupTableSines[1] = (2**( (WIDTH/2) -1))*0.024;
 lookupTableSines[2] = (2**( (WIDTH/2) -1))*0.049;

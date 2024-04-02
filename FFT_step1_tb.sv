@@ -13,8 +13,8 @@ module FFT_step1_tb #(parameter SAMPLES = 4, WIDTH = 32, STAGE = 0)
 	*/
 	
 	assign sampleInputs[0] = 100;
-	assign sampleInputs[1] = 200;
-	assign sampleInputs[2] = 150;
+	assign sampleInputs[1] = 150;
+	assign sampleInputs[2] = 200;
 	assign sampleInputs[3] = 250;
 	
 	FFT_step #(SAMPLES, WIDTH, STAGE)
