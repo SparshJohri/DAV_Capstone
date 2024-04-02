@@ -10,7 +10,7 @@ module absolute_value #(parameter WIDTH=32)
 	
 	always_comb
 	begin
-		if (input1 < (2**(WIDTH-1))) begin mid1 = input1; mid2 = 0; end
+		if (input1 <= (2**(WIDTH-1))) begin mid1 = input1; mid2 = 0; end
 		else begin mid1 = (~input1)+1; mid2 = 1; end
 	end
 	

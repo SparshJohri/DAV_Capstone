@@ -1,4 +1,4 @@
-module N_Point_FFT_tb #(parameter SAMPLES = 8, WIDTH = 32)
+module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 (
 	output [WIDTH-1:0] testBenchOutput [SAMPLES-1:0]
 );
@@ -8,14 +8,22 @@ module N_Point_FFT_tb #(parameter SAMPLES = 8, WIDTH = 32)
 	
 	initial
 	begin
-		sampleInputs[0] = 80;
-		sampleInputs[1] = 70;
-		sampleInputs[2] = 50;
-		sampleInputs[3] = 40;
-		sampleInputs[4] = 60;
-		sampleInputs[5] = 10;
-		sampleInputs[6] = 80;
-		sampleInputs[7] = 90;
+		sampleInputs[0] = 0;
+		sampleInputs[1] = 100;
+		sampleInputs[2] = 200;
+		sampleInputs[3] = 300;
+		sampleInputs[4] = 400;
+		sampleInputs[5] = 500;
+		sampleInputs[6] = 600;
+		sampleInputs[7] = 700;
+		sampleInputs[8] = 800;
+		sampleInputs[9] = 900;
+		sampleInputs[10] = 1000;
+		sampleInputs[11] = 1100;
+		sampleInputs[12] = 1200;
+		sampleInputs[13] = 1300;
+		sampleInputs[14] = 1400;
+		sampleInputs[15] = 1500;
 	end
 	
 	

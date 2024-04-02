@@ -73,10 +73,10 @@ module ButterflyUnit #(parameter SAMPLES = 2, WIDTH = 4)
 	logic [(WIDTH>>1)-1:0] output_real_B_times_W;
 	logic [(WIDTH>>1)-1:0] output_imag_B_times_W;
 	
-	assign output_real_B_times_W_with_twiddle_imag = (input2_imag*twiddle_imag/DIVIDER);//*(signOfMultiplication[1][1]*-1);
-	assign output_imag_B_times_W_with_twiddle_imag = (input2_real*twiddle_imag/DIVIDER);//*(signOfMultiplication[0][1]*-1);
-	assign output_real_B_times_W_with_twiddle_real = (input2_real*twiddle_real);//DIVIDER);//*(signOfMultiplication[0][0]*-1);
-	assign output_imag_B_times_W_with_twiddle_real = (input2_imag*twiddle_real);//DIVIDER);//*(signOfMultiplication[1][0]*-1);
+	assign output_real_B_times_W_with_twiddle_imag = (input2_imag_abs*twiddle_imag_abs/DIVIDER)*(1 - 2*signOfMultiplication[1][1]);//*(signOfMultiplication[1][1]*-1);
+	assign output_imag_B_times_W_with_twiddle_imag = (input2_real_abs*twiddle_imag_abs/DIVIDER)*(1 - 2*signOfMultiplication[0][1]);//*(signOfMultiplication[0][1]*-1);
+	assign output_real_B_times_W_with_twiddle_real = (input2_real_abs*twiddle_real_abs/DIVIDER)*(1 - 2*signOfMultiplication[0][0]);//DIVIDER);//*(signOfMultiplication[0][0]*-1);
+	assign output_imag_B_times_W_with_twiddle_real = (input2_imag_abs*twiddle_real_abs/DIVIDER)*(1 - 2*signOfMultiplication[1][0]);//DIVIDER);//*(signOfMultiplication[1][0]*-1);
 
 	assign output_real_B_times_W = output_real_B_times_W_with_twiddle_real + output_real_B_times_W_with_twiddle_imag;
 	assign output_imag_B_times_W = output_imag_B_times_W_with_twiddle_real - output_imag_B_times_W_with_twiddle_imag;
@@ -86,4 +86,4 @@ module ButterflyUnit #(parameter SAMPLES = 2, WIDTH = 4)
 	assign output2[WIDTH-1:WIDTH>>1] = input1_imag-output_imag_B_times_W;//-(input2_real*twiddle_real/DIVIDER)-(input2_imag*twiddle_imag/DIVIDER);
 	assign output2[(WIDTH>>1)-1:0] = input1_real-output_real_B_times_W;//+(input2_real*twiddle_imag/DIVIDER)-(input2_imag*twiddle_real/DIVIDER);
 	
-endmodule//
+endmodule
