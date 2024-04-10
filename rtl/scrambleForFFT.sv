@@ -1,7 +1,7 @@
 module scrambleForFFT #(parameter SAMPLES = 8, parameter WIDTH = 3)
 (
 	input [WIDTH-1:0] input_stream [SAMPLES-1:0],
-	input [WIDTH-1:0] output_stream [SAMPLES-1:0]
+	output [WIDTH-1:0] output_stream [SAMPLES-1:0]
 );
 
 	genvar i;

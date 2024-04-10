@@ -1,3 +1,5 @@
+`timescale 1ps/1ps;
+
 module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 (
 	output [WIDTH-1:0] testBenchOutput [SAMPLES-1:0]
@@ -5,9 +7,20 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 
 	logic [WIDTH-1:0] intermediates [$clog2(SAMPLES):0] [SAMPLES-1:0];
 	logic [WIDTH-1:0] sampleInputs [SAMPLES-1:0];
+	logic clk, rst, out_valid;
 	
 	initial
 	begin
+
+		forever begin
+			#1 clk = ~clk;
+		end
+
+		// run with iverilog
+		$dumpfile("dump.vcd");
+		$dumpvars(0);
+
+
 		sampleInputs[0] = 0;
 		sampleInputs[1] = 100;
 		sampleInputs[2] = 200;
@@ -27,9 +40,12 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 	end
 	
 	
-	N_Point_FFT #(SAMPLES, WIDTH) tester
+	N_point_fft_seq #(SAMPLES, WIDTH) tester
 	(
 		.sampleInputs(sampleInputs),
+		.clk(clk),
+		.rst(rst),
+		.out_valid(out_valid),
 		.outputs(testBenchOutput),
 		.intermediates(intermediates)
 	);
