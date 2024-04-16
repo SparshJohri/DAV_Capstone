@@ -1,7 +1,7 @@
-module twiddleFactorCalculator #(parameter TOTAL_WIDTH=8, WIDTH = 8)
+module twiddleFactorCalculator #(parameter WIDTH = 8)
 (
 	input [11:0] SAMPLES,
-	input [TOTAL_WIDTH-1:0] which_factor,
+	input [$clog2(SAMPLES)-1:0] which_factor,
 	output [(WIDTH-1):0] result
 );
 
@@ -15,10 +15,10 @@ module twiddleFactorCalculator #(parameter TOTAL_WIDTH=8, WIDTH = 8)
 		
 		int x;
 		
-		assign x = (256/SAMPLES)*(which_factor);
+		assign x = (256>>($clog2(SAMPLES)))*(which_factor);
 		
-		assign result_real = lookupTableCosines[(which_factor)*(256/SAMPLES)];
-		assign result_imag = lookupTableSines[(which_factor)*(256/SAMPLES)];
+		assign result_real = lookupTableCosines[(which_factor)*(256>>($clog2(SAMPLES)))];
+		assign result_imag = lookupTableSines[(which_factor)*(256>>($clog2(SAMPLES)))];
 		
 		assign result[(WIDTH-1):(WIDTH/2)] = result_imag;
 		assign result[((WIDTH/2) -1):0] = result_real;
