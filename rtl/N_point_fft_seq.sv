@@ -21,8 +21,10 @@ module N_point_fft_seq #(
 	localparam RUN = 1;
 	localparam FINISH = 2;
 
-	logic [1:0] state, next_state;
-	logic [$clog2(SAMPLES)-1:0] cycle_cntr, cycle_cntr_d;
+	logic [1:0] state = IDLE;
+	logic [1:0] next_state;
+	logic [$clog2(SAMPLES)-1:0] cycle_cntr = 0;
+	logic [$clog2(SAMPLES)-1:0] cycle_cntr_d;
 
 	scrambleForFFT_tb #(SAMPLES, $clog2(SAMPLES)) get_new_indices
 	(
@@ -70,7 +72,7 @@ module N_point_fft_seq #(
 				end
 			end
 			FINISH: begin
-				next_state = IDLE;
+				next_state = FINISH;
 			end
 			default:
 				next_state = IDLE;
@@ -80,12 +82,13 @@ module N_point_fft_seq #(
 	always @(posedge clk) begin
 		if (rst) begin
 			state <= IDLE;
-			cycle_cntr = 0;
+			cycle_cntr <= 0;
 			// fft_in <= 0;
 		end else begin
 			state <= next_state;
-			cycle_cntr <= cycle_cntr_d; 
-			fft_in <= fft_in_d;
+			cycle_cntr <= cycle_cntr_d;
+			if (state!=FINISH)
+				fft_in <= fft_in_d;
 		end
 	end
 
