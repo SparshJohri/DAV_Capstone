@@ -46,8 +46,7 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 		.clk(clk),
 		.rst(rst),
 		.out_valid(out_valid),
-		.outputs(testBenchOutput),
-		.intermediates(intermediates)
+		.outputs(testBenchOutput)
 	);
 
 endmodule

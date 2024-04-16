@@ -35,5 +35,10 @@ module FFT_step1_tb #(parameter SAMPLES = 4, WIDTH = 32, STAGE = 0)
 			#1 clk = ~clk;
 		end
 	end
+
+	initial begin
+		#100 $finish;
+	end
+
 		
 endmodule
