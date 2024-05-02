@@ -1,5 +1,0 @@
-module FFT_step1_tb #(parameter SAMPLES = 4)
-(
-	input [$clog2(SAMPLES)-1:0] stage,
-	output [$clog2(SAMPLES)-1:0] display_stream [SAMPLES-1:0]
-);

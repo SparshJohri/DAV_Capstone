@@ -1,4 +1,0 @@
-module scrambleForFFT #parameter(SAMPLES = 8, WIDTH = 3)
-(
-
-)

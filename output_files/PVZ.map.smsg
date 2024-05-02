@@ -1,2 +1,0 @@
-Warning (10268): Verilog HDL information at FFT_step.sv(61): always construct contains both blocking and non-blocking assignments File: C:/Users/chich/Repository/DAV/Capstone/rtl/FFT_step.sv Line: 61
-Warning (10273): Verilog HDL warning at altera_modular_adc_control_fsm.v(718): extended using "x" or "z" File: C:/Users/chich/Repository/DAV/Capstone/db/ip/adc/submodules/altera_modular_adc_control_fsm.v Line: 718
