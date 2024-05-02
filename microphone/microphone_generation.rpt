@@ -1,0 +1,30 @@
+Info: Starting: Create block symbol file (.bsf)
+Info: qsys-generate C:\Users\chich\Repository\DAV\Capstone\microphone.qsys --block-symbol-file --output-directory=C:\Users\chich\Repository\DAV\Capstone\microphone --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Capstone/microphone.qsys
+Progress: Reading input file
+Progress: Adding adc_mega_0 [altera_up_avalon_adc_mega 18.0]
+Progress: Parameterizing module adc_mega_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: qsys-generate succeeded.
+Info: Finished: Create block symbol file (.bsf)
+Info: 
+Info: Starting: Create HDL design files for synthesis
+Info: qsys-generate C:\Users\chich\Repository\DAV\Capstone\microphone.qsys --synthesis=VERILOG --output-directory=C:\Users\chich\Repository\DAV\Capstone\microphone\synthesis --family="MAX 10" --part=10M50DAF484C7G
+Progress: Loading Capstone/microphone.qsys
+Progress: Reading input file
+Progress: Adding adc_mega_0 [altera_up_avalon_adc_mega 18.0]
+Progress: Parameterizing module adc_mega_0
+Progress: Building connections
+Progress: Parameterizing connections
+Progress: Validating
+Progress: Done reading input file
+Info: microphone: Generating microphone "microphone" for QUARTUS_SYNTH
+Info: adc_mega_0: Starting Generation of ADC Controller for DE-series Board
+Info: adc_mega_0: C:/intelfpga_lite/21.1/ip/altera/university_program/input_output/altera_up_avalon_adc/hdl/altera_up_avalon_adv_adc.v C:/Users/chich/AppData/Local/Temp/alt9819_2220580143092017194.dir/0002_sopcgen/microphone_adc_mega_0.v
+Info: adc_mega_0: "microphone" instantiated altera_up_avalon_adc_mega "adc_mega_0"
+Info: microphone: Done "microphone" with 2 modules, 3 files
+Info: qsys-generate succeeded.
+Info: Finished: Create HDL design files for synthesis

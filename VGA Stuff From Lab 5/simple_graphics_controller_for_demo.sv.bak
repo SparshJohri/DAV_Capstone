@@ -1,0 +1,27 @@
+module simple_graphics_controller_for_demo
+(
+	input [9:0] x_coord_of_current_block,
+	input [9:0] y_coord_of_current_block,
+	input whichRAM,
+	output [7:0] pixelPacking
+);
+
+	always_comb
+	begin
+		if (whichRAM)
+		begin
+			pixelPacking[7:6] = 0; //blue
+			pixelPacking[5:3] = 0; //green
+			pixelPacking[2:0] = 1; //red
+		end
+		
+		else
+		begin
+			pixelPacking[7:6] = 0; //blue
+			pixelPacking[5:3] = 0; //green
+			pixelPacking[2:0] = 1; //red		
+		end
+		
+	end
+
+endmodule

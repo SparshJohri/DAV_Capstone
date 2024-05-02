@@ -1,0 +1,16 @@
+Analysis & Synthesis Status : Successful - Sun Apr 28 15:59:49 2024
+Quartus Prime Version : 21.1.0 Build 842 10/21/2021 SJ Lite Edition
+Revision Name : PVZ
+Top-level Entity Name : get_microphone_samples
+Family : MAX 10
+Total logic elements : 97
+    Total combinational functions : 69
+    Dedicated logic registers : 75
+Total registers : 75
+Total pins : 33
+Total virtual pins : 0
+Total memory bits : 320
+Embedded Multiplier 9-bit elements : 0
+Total PLLs : 1
+UFM blocks : 0
+ADC blocks : 1
