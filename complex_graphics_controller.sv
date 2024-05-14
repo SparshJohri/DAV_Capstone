@@ -124,16 +124,6 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 			else if (((playerY > 1) && (~go_up)) && (go_down))
 				playerY <= playerY-1;
 		end
-		/*
-		if (((playerX<MAX_X)&&(playerX>=MIN_X))&&
-			 ((playerY<MAX_Y)&&(playerY>=MIN_Y)))
-		begin
-			playerX <= 8;
-			playerY <= 18;
-		end
-		*/
-		
-		//updatePlayerY <= 0;
 	end
 	
 	always_comb
@@ -149,7 +139,6 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 		
 		else
 		begin
-			//While this is set to zero for now, if we have time, this is where our game would go
 			if ((x_coord_of_current_block==mine_X)&&(y_coord_of_current_block==mine_Y))
 				pixelPacking = 7;
 			else if ((x_coord_of_current_block=={4'b0, playerX})&&(y_coord_of_current_block=={4'b0, playerY}))
@@ -158,6 +147,8 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 				pixelPacking = 0;
 		end
 	end
+	
 	assign pixelPacking_out = pixelPacking;
 	assign playerX_out = playerX;
+
 endmodule

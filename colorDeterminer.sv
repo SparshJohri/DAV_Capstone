@@ -23,22 +23,10 @@ module colorDeterminer #(parameter SAMPLES=32)
 			else
 			begin
 				if (index_holder < (SAMPLES*1/3))
-					outColor_a = 'b11111111;
+					outColor_a = 'b00000011;
 				else
-					outColor_a = 'b00000111;
+					outColor_a = 'b00100011;
 			end
-			
-			/*
-			if (index_holder < (SAMPLES/3))
-				outColor_a = 1;
-			else
-			begin
-				if (index_holder < (SAMPLES*2/3))
-					outColor_a = 7;
-				else
-					outColor_a = 7<<3 + 7;
-			end
-			*/
 		end
 	end
 	
