@@ -8,14 +8,22 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 												)
 (
 	input clk,
+	input go_left,
+	input go_right,
+	input go_up,
+	input go_down,
 	input [WIDTH-1:0] frequency_bins [SAMPLES-1:0],
 	input [9:0] x_coord_of_current_block,
 	input [9:0] y_coord_of_current_block,
 	input whichRAM,
-	output [7:0] pixelPacking,
-	input reset
+	output [7:0] pixelPacking_out,
+	input reset,
+	
+	
+	output [5:0] playerX_out
 );
 
+	logic [7:0] pixelPacking;
 	logic [7:0] colorToDisplay;
 	logic [7:0] emptyBackgroundForHistogram;
 
@@ -87,14 +95,43 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	
 	always @(posedge movementCoordinator[19])
 	begin
-		playerX <= playerX+updatePlayerX;
+		//playerX <= playerX+updatePlayerX;
 		playerY <= playerY + updatePlayerY;
 		
-		
-		if (playerX < 16)
-			updatePlayerX <= 1;
-		else if (playerX > 16);
+		/*
+		if (playerX > 30)
 			updatePlayerX <= -1;
+		else if (playerX < 2)
+			updatePlayerX <= 1;
+		*/
+		
+		if (((playerX<MAX_X)&&(playerX>=MIN_X))&&
+			 ((playerY<MAX_Y)&&(playerY>=MIN_Y)))
+		begin
+			playerX <= mine_X;
+			playerY <= mine_Y;
+		end
+		
+		else
+		begin
+			if (((playerX < 31) && (go_right)) && (~go_left))
+				playerX <= playerX+1;
+			else if (((playerX > 1) && (~go_right)) && (go_left))
+				playerX <= playerX-1;
+			
+			if (((playerY < 23) && (go_up)) && (~go_down))
+				playerY <= playerY+1;
+			else if (((playerY > 1) && (~go_up)) && (go_down))
+				playerY <= playerY-1;
+		end
+		/*
+		if (((playerX<MAX_X)&&(playerX>=MIN_X))&&
+			 ((playerY<MAX_Y)&&(playerY>=MIN_Y)))
+		begin
+			playerX <= 8;
+			playerY <= 18;
+		end
+		*/
 		
 		//updatePlayerY <= 0;
 	end
@@ -121,5 +158,6 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 				pixelPacking = 0;
 		end
 	end
-
+	assign pixelPacking_out = pixelPacking;
+	assign playerX_out = playerX;
 endmodule
