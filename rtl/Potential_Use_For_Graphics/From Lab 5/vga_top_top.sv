@@ -19,10 +19,10 @@ module vga_top_top
 
 	wire [$clog2(526)-1:0]  vc_count;
 	wire [$clog2(801)-1:0]  hc_count;
-		
+	
+	/*
    vga VGA(
         .vgaclk(clk),
-		  .rst(sample_rst),
         .hc_out(hc_count),
         .vc_out(vc_count),
         .hsync(hsync),
@@ -31,6 +31,7 @@ module vga_top_top
         .green(green),
         .blue(blue)
     );
+	 */
 
 
 endmodule

@@ -1,7 +1,8 @@
-module vga(
+module vga #(SAMPLES=32, WIDTH=32)
+(
 	input vgaclk,
+	input [7:0] colorPacking,
 	// 8-bit color allocates 3 bits for red, 3 for green, 2 for blue
-	input rst,
 	output [9:0] hc_out,
 	output [9:0] vc_out,
 	output reg hsync,
@@ -36,10 +37,10 @@ module vga(
 	
 	reg [9:0] hc = 0;
 	reg [9:0] vc = 0;
-	logic [7:0] colorPacking;
+	// logic [7:0] colorPacking;
 	logic [7:0] x;
 	logic [7:0] y;
-	logic write_to_two = 0;
+	//logic write_to_two = 0;
 	
 	assign x = hc/20;
 	assign y = hc/20;
@@ -47,15 +48,6 @@ module vga(
 	assign vc_out = vc;
 	assign hsync = ~( (hc<(HPIXELS+HFP+HSPULSE)) && ((hc>(HPIXELS+HFP-1)) ) );
 	assign vsync = ~( (vc<(VPIXELS+VFP+VSPULSE)) && ((vc>(VPIXELS+VFP-1)) ) );
-
-	ping_pong color_getter
-	(
-		vgaclk,
-		hc,
-		vc,
-		colorPacking,
-		write_to_two
-	);
 	
 	always_comb begin
 		if ( (hc > (HPIXELS-1) ) || (vc > (VPIXELS-1) ) )
@@ -75,11 +67,7 @@ module vga(
 		begin
 			hc <= 0;
 			if (vc >= (VPIXELS+VFP+VSPULSE+VBP-1))
-			begin
 				vc <= 0;
-				write_to_two <= ~write_to_two;
-			end
-			
 			else
 				vc <= vc + 1;
 		end

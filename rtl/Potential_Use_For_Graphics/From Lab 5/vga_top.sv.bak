@@ -1,13 +1,9 @@
 module vga_top 
 (
     input clk,
-	 input go_left,
-	 input go_right,
-	 input go_up,
-	 input go_down,
-    output [2:0] red,
-    output [2:0] green,
-    output [1:0] blue,
+    output [3:0] red,
+    output [3:0] green,
+    output [3:0] blue,
     output hsync,
     output vsync,
 	 output [5:0] led_debugging
@@ -19,7 +15,7 @@ module vga_top
 	 logic [2:0] input_red = 6;
 	 logic [2:0] input_green = 0;
 	 logic [1:0] input_blue = 0;
-	 logic [7:0] color;
+	 logic [7:0] color = 0;
 	 
 	 wire res_clock;
     wire [$clog2(526)-1:0]  vc_count;
@@ -32,50 +28,35 @@ module vga_top
 	 logic [32-1:0] frequency_bins [8-1:0];
 	 logic reset;
 	 
-	 assign frequency_bins[0] = 30;
+	 assign frequency_bins[0] = 100;
 	 assign frequency_bins[1] = 0;
 	 assign frequency_bins[2] = 60;
 	 assign frequency_bins[3] = 70;
-	 assign frequency_bins[4] = 100;
+	 assign frequency_bins[4] = 10;
 	 assign frequency_bins[5] = 40;
 	 assign frequency_bins[6] = 30;
 	 assign frequency_bins[7] = 0;
 	 
 	 assign reset = 0;
-	 
+
+	 /*
 	 pll_2 DataClock //get the clock for the VGA 
 	 (
 		clk,
 		res_clock
 	 );
-	 
-	 //assign res_clock = clk;
-	 
-	 /*
-	 N_point_fft_seq #(WIDTH, SAMPLES) tester
-	 (
-		.sampleInputs(sampleInputs),
-		.clk(clk),
-		.rst(rst),
-		.out_valid(out_valid),
-		.outputs(testBenchOutput)
-	 );
 	 */
-	 
+	 assign res_clock = clk;
 	 
 	 logic [5:0] playerX_out;
-	 complex_graphics_controller #(8, 32, 0, 32, 0, 10) getColor //calculate the next pixel for the given block
+	 complex_graphics_controller #(8, 32, 0, 32, 0, 12) getColor //calculate the next pixel for the given block
 	 (
 		.clk(res_clock),
-		.go_left(go_left),
-		.go_right(go_right),
-		.go_up(go_up),
-		.go_down(go_down),
 		.frequency_bins(frequency_bins),
 		.x_coord_of_current_block(x),
 		.y_coord_of_current_block(y),
 		.whichRAM(write_to_two),
-		.pixelPacking_out(updated_value_of_block),
+		.pixelPacking(updated_value_of_block),
 		.reset(reset),
 		.playerX_out(playerX_out)
 	 );

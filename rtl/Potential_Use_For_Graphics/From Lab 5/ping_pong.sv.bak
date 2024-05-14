@@ -1,12 +1,12 @@
-module ping_pong #(parameter SAMPLES, WIDTH)
+module ping_pong
 (
 	input clk, //only because the RAM IP requires it
 	input [9:0] hc,
 	input [9:0] vc,
-	input [7:0] updated_value_of_block,
-	output logic [7:0] pixel_to_display
+	output [7:0] pixel_to_display,
+	input write_to_two
 );
-
+	logic [7:0] updated_value_of_block;
 	wire  [7:0] intermediate_color_wire;
 	logic [7:0] table_tennis1_data_write, table_tennis1_data_read;
 	logic [7:0] table_tennis2_data_write, table_tennis2_data_read;
@@ -15,11 +15,17 @@ module ping_pong #(parameter SAMPLES, WIDTH)
 	assign y = (vc/20);
 	assign blockNumber = y * 32 + x;
 	
-	logic write_to_two = 0;
+	reg [7:0] array1 [1200:0];
+	reg [7:0] array2 [1200:0];
 	
-	reg [7:0] array1 [800:0];
-	reg [7:0] array2 [800:0];
-	
+	simple_graphics_controller_for_demo
+	getColor
+	(
+		.x_coord_of_current_block(x),
+		.y_coord_of_current_block(y),
+		.whichRAM(write_to_two),
+		.pixelPacking(updated_value_of_block)
+	);
 	/*
 	PING_PONG_RAM_IP
     table_tennis1
@@ -45,14 +51,9 @@ module ping_pong #(parameter SAMPLES, WIDTH)
 	always @(posedge clk)
 	begin
 		if ((write_to_two))
-			array2[blockNumber] <= updated_value_of_block;
+			array2[blockNumber] <= updated_value_of_block; //This line isn't doing anything, even though updated_value_of_block contains the correct value
 		else
-			array1[blockNumber] <= updated_value_of_block;
-
-		if ((vc == 0) && (hc==0))
-			begin
-				write_to_two <= ~write_to_two;
-			end
+			array1[blockNumber] <= updated_value_of_block; //This line isn't doing anything, even though updated_value_of_block contains the correct value
 	end
 	
 	always_comb
