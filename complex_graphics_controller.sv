@@ -8,15 +8,13 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 												)
 (
 	input clk,
-	input [WIDTH-1:0] frequency_bins [SAMPLES-1:0], //uncomment this when you start uncommenting the other things 
+	input [WIDTH-1:0] frequency_bins [SAMPLES-1:0],
 	input [9:0] x_coord_of_current_block,
 	input [9:0] y_coord_of_current_block,
 	input whichRAM,
 	output [7:0] pixelPacking,
 	input reset
 );
-
-	//SAMPLES/6 =  
 
 	logic [7:0] colorToDisplay;
 	logic [7:0] emptyBackgroundForHistogram;
@@ -26,8 +24,8 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	
 	
 	logic [9:0] curr_bin;
-	/*
 	
+	/*
 	always_comb
 	begin
 		if ( (x_coord_of_current_block >= MIN_X) && (x_coord_of_current_block < MAX_X) )
@@ -36,13 +34,10 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 			curr_bin = 0;
 	end
 	*/
-	
 	assign curr_bin = x_coord_of_current_block;
-	
 	logic [9:0] max_y_to_display;
 	localparam maxPowerToShow = 100;
 	//assign max_y_to_display = ((MAX_Y-MIN_Y)*frequency_bins[curr_bin]/maxPowerToShow)+MIN_Y;//8;//(frequency_bins[curr_bin]/maxPowerToShow)*(MAX_Y-MIN_Y);
-	
 	assign max_y_to_display = 8*frequency_bins[curr_bin]/100;
 	
 	
@@ -77,7 +72,7 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	reg [BITS_FOR_COORD-1:0] playerX = 8;
 	reg [BITS_FOR_COORD-1:0] playerY = 18;
 
-	reg [5:0] mine_X = 16;
+	reg [5:0] mine_X = 20;
 	reg [5:0] mine_Y = 18;
 	
 	reg [5:0] updatePlayerX = 1;
@@ -92,14 +87,15 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	
 	always @(posedge movementCoordinator[19])
 	begin
-		playerX <= updatePlayerX;
+		playerX <= playerX+updatePlayerX;
 		playerY <= playerY + updatePlayerY;
 		
-		if (playerX == 0)
-			updatePlayerX <= playerX+1;
-		else if (playerX >= 32);
-			updatePlayerX <= playerX-1;
-			
+		
+		if (playerX < 16)
+			updatePlayerX <= 1;
+		else if (playerX > 16);
+			updatePlayerX <= -1;
+		
 		//updatePlayerY <= 0;
 	end
 	
