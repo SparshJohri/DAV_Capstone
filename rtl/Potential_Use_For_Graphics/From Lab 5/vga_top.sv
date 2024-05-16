@@ -34,8 +34,8 @@ module vga_top
 	 assign defaultHistogramValues[7] = 40;
 	 
 	 logic [32-1:0] sampleRec [8-1:0];
-	 logic [32-1:0] loadNextSamples [8-1:0];
 	 logic [32-1:0] frequencyBins [8-1:0];
+	 logic [32-1:0] frequencyMags [8-1:0];
 	 logic [32-1:0] frequencyBins_perm [8-1:0];
 	 logic reset;
 	 logic out_valid;
@@ -51,15 +51,12 @@ module vga_top
 	 begin
 		if (out_valid)
 		begin
-			frequencyBins_perm <= frequencyBins;
+			frequencyBins_perm <= frequencyMags;
 			reset <= 1;
 		end
 		
 		if (reset)
-		begin
 			reset <= 0;
-			loadNextSamples <= sampleRec;
-		end
 	 end
 	 
 	 pll_2 DataClock //get the clock for the VGA 
@@ -71,14 +68,20 @@ module vga_top
 	 /*
 	 N_point_fft_seq #(32, 8) tester
 	 (
-		.sampleInputs(loadNextSamples),
+		.sampleInputs(sampleRec),
 		.clk(clk),
 		.rst(reset),
 		.out_valid(out_valid),
 		.outputs(frequencyBins)
 	 );
 	 
-	 COMPUTE THE MAGNITUDES OF THE FREQUENCY BINS (frequencyBins_show[i] = frequencyBins_show[i][31:16] + frequencyBins_show[i][31:16]
+	 genvar i;
+	 generate
+		for (int i=0; i<8; i++)
+		begin : MAGNITUDE_GETTER
+			frequencyMags = (frequencyBins[31:16] + frequencyBins[15:0])*4/5; //approximation of L2 distance
+		end
+	 endgenerate
 	 */
 	 
 	 complex_graphics_controller #(8, 32, 0, 32, 0, 8) getColor //calculate the next pixel for the given block
@@ -88,7 +91,7 @@ module vga_top
 		.go_right(go_right),
 		.go_up(go_up),
 		.go_down(go_down),
-		.frequency_bins(defaultHistogramValues), //sampleRec is the collection of raw output from the microphone
+		.frequency_bins(defaultHistogramValues), //sampleRec = collection of mic samples; frequencyBins_perm = values we want to see? I think?
 		.x_coord_of_current_block(x),
 		.y_coord_of_current_block(y),
 		.whichRAM(write_to_two),
