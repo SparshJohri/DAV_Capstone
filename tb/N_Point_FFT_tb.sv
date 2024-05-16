@@ -36,7 +36,7 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 		sampleInputs[15] = 1500;
 		
 		#100
-		rst = 1;
+		//rst = 1;
 
 		sampleInputs[0] = 900;
 		sampleInputs[1] = 800;
@@ -54,13 +54,8 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 		sampleInputs[13] = 1400;
 		sampleInputs[14] = 1500;
 		sampleInputs[15] = 1600;
-
-		
-		#2
-		rst = 0;
 		
 		#100
-		rst = 1;
 		
 		sampleInputs[0] = 0;
 		sampleInputs[1] = 100;
@@ -79,12 +74,7 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 		sampleInputs[14] = 1400;
 		sampleInputs[15] = 1500;
 		
-		
-		#2
-		rst = 0;
-		
 		#100
-		rst = 1;
 		
 		sampleInputs[0] = 900;
 		sampleInputs[1] = 800;
@@ -102,16 +92,19 @@ module N_Point_FFT_tb #(parameter SAMPLES = 16, WIDTH = 32)
 		sampleInputs[13] = 1400;
 		sampleInputs[14] = 1500;
 		sampleInputs[15] = 1600;
-		
-		#2
-		rst = 0;
 	end
 	
 	
 	always @(posedge clk)
 	begin
 		if (out_valid)
+		begin
 			testBenchOutput_actual <= testBenchOutput;
+			rst <= 1;
+		end
+		
+		if (rst)
+			rst <= 0;
 	end
 	
 	assign testBenchOutput_actual_actual = testBenchOutput_actual;

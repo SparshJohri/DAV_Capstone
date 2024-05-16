@@ -1,20 +1,13 @@
 module vga_top 
 (
-    input clk,
-	 input go_left,
-	 input go_right,
-	 input go_up,
-	 input go_down,
-    output [2:0] red,
-    output [2:0] green,
-    output [1:0] blue,
-    output hsync,
-    output vsync,
-	 output [5:0] led_debugging
+     input clk, input adc_clk,
+	 input go_left, input go_right, input go_up, input go_down,
+     output [2:0] red, output [2:0] green, output [1:0] blue,
+     output hsync, output vsync,
+	 output [9:0] led_debugging
 );
 	 logic [7:0] updated_value_of_block;
-	 logic [9:0] x;
-	 logic [9:0] y;
+	 logic [9:0] x, y;
 	 
 	 logic [2:0] input_red = 6;
 	 logic [2:0] input_green = 0;
@@ -22,26 +15,40 @@ module vga_top
 	 logic [7:0] color;
 	 
 	 wire res_clock;
-    wire [$clog2(526)-1:0]  vc_count;
-    wire [$clog2(801)-1:0]  hc_count;
+     wire [$clog2(526)-1:0]  vc_count;
+     wire [$clog2(801)-1:0]  hc_count;
 	 
 	 assign x = hc_count/20;
 	 assign y = vc_count/20;
 
 	 
-	 logic [32-1:0] frequency_bins [8-1:0];
+	 logic [32-1:0] sampleRec [8-1:0];
+	 logic [32-1:0] loadNextSamples [8-1:0];
+	 logic [32-1:0] frequencyBins [8-1:0];
+	 logic [32-1:0] frequencyBins_perm [8-1:0];
 	 logic reset;
+	 logic out_valid;
 	 
-	 assign frequency_bins[0] = 30;
-	 assign frequency_bins[1] = 0;
-	 assign frequency_bins[2] = 60;
-	 assign frequency_bins[3] = 70;
-	 assign frequency_bins[4] = 100;
-	 assign frequency_bins[5] = 40;
-	 assign frequency_bins[6] = 30;
-	 assign frequency_bins[7] = 0;
+	 always @(posedge adc_clk)
+	 begin
+		sampleRec[7:1] <= sampleRec[6:0];
+		sampleRec[0] <= mic_stream;
+	 end
 	 
-	 assign reset = 0;
+	 always @(posedge clk)
+	 begin
+		if (out_valid)
+		begin
+			frequencyBins_perm <= frequencyBins;
+			reset <= 1;
+		end
+		
+		if (reset)
+		begin
+			reset <= 0;
+			loadNextSamples <= sampleRec;
+		end
+	 end
 	 
 	 pll_2 DataClock //get the clock for the VGA 
 	 (
@@ -49,18 +56,15 @@ module vga_top
 		res_clock
 	 );
 	 
-	 //assign res_clock = clk;
-	 
-	 /*
-	 N_point_fft_seq #(WIDTH, SAMPLES) tester
+	
+	 N_point_fft_seq #(32, 8) tester
 	 (
-		.sampleInputs(sampleInputs),
+		.sampleInputs(loadNextSamples),
 		.clk(clk),
-		.rst(rst),
+		.rst(reset),
 		.out_valid(out_valid),
-		.outputs(testBenchOutput)
+		.outputs(frequencyBins)
 	 );
-	 */
 	 
 	 
 	 logic [5:0] playerX_out;
@@ -71,7 +75,7 @@ module vga_top
 		.go_right(go_right),
 		.go_up(go_up),
 		.go_down(go_down),
-		.frequency_bins(frequency_bins),
+		.frequency_bins(sampleRec),
 		.x_coord_of_current_block(x),
 		.y_coord_of_current_block(y),
 		.whichRAM(write_to_two),
@@ -102,6 +106,13 @@ module vga_top
         .blue(blue)
     );
 	 
-	 assign led_debugging = playerX_out;
+	 
+	 logic [31:0] mic_stream;
+	 get_microphone_samples microphoneInputDisplayer
+	 (
+		adc_clk,
+		mic_stream,
+		led_debugging
+	 );
 
 endmodule
