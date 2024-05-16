@@ -20,7 +20,8 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	input reset,
 	
 	
-	output [5:0] playerX_out
+	output [5:0] playerX_out,
+	output [5:0] playerY_out
 );
 
 	logic [7:0] pixelPacking;
@@ -83,9 +84,24 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	reg [5:0] mine_X = 20;
 	reg [5:0] mine_Y = 18;
 	
+	reg [5:0] zombie1_X = 6;
+	reg [5:0] zombie1_Y = 25;
+	reg [5:0] zombie2_X = 20;
+	reg [5:0] zombie2_Y = 27;
+	reg [5:0] zombie3_X = 22;
+	reg [5:0] zombie3_Y = 22;
+	
 	reg [5:0] updatePlayerX = 1;
 	reg [5:0] updatePlayerY = 0;
-	reg [19:0] movementCoordinator = 0;
+
+	reg [5:0] update_zombie1_X = 0;
+	reg [5:0] update_zombie1_Y = 0;
+	reg [5:0] update_zombie2_X = 0;
+	reg [5:0] update_zombie2_Y = 0;
+	reg [5:0] update_zombie3_X = 0;
+	reg [5:0] update_zombie3_Y = 0;
+	
+	reg [22:0] movementCoordinator = 0;
 	
 	
 	always @(posedge clk)
@@ -95,15 +111,7 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	
 	always @(posedge movementCoordinator[19])
 	begin
-		//playerX <= playerX+updatePlayerX;
 		playerY <= playerY + updatePlayerY;
-		
-		/*
-		if (playerX > 30)
-			updatePlayerX <= -1;
-		else if (playerX < 2)
-			updatePlayerX <= 1;
-		*/
 		
 		if (((playerX<MAX_X)&&(playerX>=MIN_X))&&
 			 ((playerY<MAX_Y)&&(playerY>=MIN_Y)))
@@ -126,6 +134,27 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 		end
 	end
 	
+
+	always @(posedge movementCoordinator[22])
+	begin	
+		zombie1_Y <= zombie1_Y + update_zombie1_Y;
+		zombie2_Y <= zombie2_Y + update_zombie1_Y;
+		zombie3_Y <= zombie3_Y + update_zombie1_Y;
+		
+		if (zombie1_Y > 2) 
+			update_zombie1_Y <= -1;
+		else
+			update_zombie1_Y <= 0;
+		if (zombie2_Y > 2)
+			update_zombie2_Y <= -1;
+		else
+			update_zombie2_Y <= 0;
+		if (zombie3_Y > 2) 
+			update_zombie3_Y <= -1;
+		else
+			update_zombie3_Y <= 0;
+	end
+	
 	always_comb
 	begin
 		if (((x_coord_of_current_block<MAX_X)&&(x_coord_of_current_block>=MIN_X))&&
@@ -139,10 +168,16 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 		
 		else
 		begin
-			if ((x_coord_of_current_block==mine_X)&&(y_coord_of_current_block==mine_Y))
+			if ((x_coord_of_current_block==mine_X)&&(y_coord_of_current_block==mine_Y)) //check for mine
 				pixelPacking = 7;
-			else if ((x_coord_of_current_block=={4'b0, playerX})&&(y_coord_of_current_block=={4'b0, playerY}))
+			else if ((x_coord_of_current_block=={4'b0, playerX})&&(y_coord_of_current_block=={4'b0, playerY})) //check for player
 				pixelPacking = colorToDisplay;
+			else if (((x_coord_of_current_block==zombie1_X)&&(y_coord_of_current_block==zombie1_Y)) || 
+					 ( ((x_coord_of_current_block==zombie2_X)&&(y_coord_of_current_block==zombie2_Y)) || 
+					   ((x_coord_of_current_block==zombie3_X)&&(y_coord_of_current_block==zombie3_Y)) 
+					 ) 
+					  )
+				pixelPacking = 'b11011000;
 			else
 				pixelPacking = 0;
 		end
@@ -150,5 +185,6 @@ module complex_graphics_controller #(parameter SAMPLES = 32,
 	
 	assign pixelPacking_out = pixelPacking;
 	assign playerX_out = playerX;
+	assign playerY_out = playerY;
 
 endmodule
