@@ -10,6 +10,8 @@ module vga_top
 	 logic [9:0] x, y;
 	 logic [5:0] playerX_out;
 	 logic [5:0] playerY_out;
+	 logic [WIDTH-1:0] sampleInputs [SAMPLES-1:0];
+
 	 
 	 logic [2:0] input_red = 6;
 	 logic [2:0] input_green = 0;
@@ -17,21 +19,21 @@ module vga_top
 	 logic [7:0] color;
 	 
 	 wire res_clock;
-    wire [$clog2(526)-1:0]  vc_count;
-    wire [$clog2(801)-1:0]  hc_count;
+     wire [$clog2(526)-1:0]  vc_count;
+     wire [$clog2(801)-1:0]  hc_count;
 	 
 	 assign x = hc_count/20;
 	 assign y = vc_count/20;
 
 	 
 	 logic [32-1:0] defaultHistogramValues [8-1:0];
-	 assign defaultHistogramValues[0] = 70;
-	 assign defaultHistogramValues[1] = 20;
-	 assign defaultHistogramValues[2] = 30;
-	 assign defaultHistogramValues[3] = playerX_out*2;
-	 assign defaultHistogramValues[5] = 30;
-	 assign defaultHistogramValues[6] = playerY_out*4;
-	 assign defaultHistogramValues[7] = 40;
+	 assign defaultHistogramValues[0] = outputs[0];
+	 assign defaultHistogramValues[1] = outputs[1];
+	 assign defaultHistogramValues[2] = outputs[2];
+	 assign defaultHistogramValues[3] = outputs[3];
+	 assign defaultHistogramValues[5] = outputs[4];
+	 assign defaultHistogramValues[6] = outputs[5];
+	 assign defaultHistogramValues[7] = outputs[6];
 	 
 	 logic [32-1:0] sampleRec [8-1:0];
 	 logic [32-1:0] frequencyBins [8-1:0];
@@ -113,7 +115,7 @@ module vga_top
 	 vga #(8, 32) VGA //calculate the hsync, vsync, and the three colors from the pixel packing
 	 (
         .vgaclk(res_clock),
-		  .colorPacking(color),
+		.colorPacking(color),
         .hc_out(hc_count),
         .vc_out(vc_count),
         .hsync(hsync),
@@ -122,6 +124,35 @@ module vga_top
         .green(green),
         .blue(blue)
     );
+
+	N_point_fft_seq #(
+		.WIDTH(32), .SAMPLES(16)
+	) N_point_fft_seq_inst (
+		clk,
+		rst,
+		sampleInputs,
+		out_valid,
+		outputs
+	);
+
+	logic [$clog2(SAMPLES)-1:0] mic_buffer_counter;
+	logic fill_buffer_en;
+	always @(posedge adc_clk) begin
+
+		if (rst || out_valid) begin
+			mic_buffer_counter <= 0;
+			fill_buffer_en <= 1;
+		end
+		
+		if (mic_buffer_counter == SAMPLES - 1) begin
+			fill_buffer_en <= 0;
+		end
+
+		if (fill_buffer_en) begin
+			mic_buffer_counter <= mic_buffer_counter + 1;
+			sampleInputs[mic_buffer_counter] <= mic_stream;
+		end
+	end
 	 
 	 
 	 logic [31:0] mic_stream;
