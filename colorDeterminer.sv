@@ -19,13 +19,13 @@ module colorDeterminer #(parameter SAMPLES=32)
 		else
 		begin
 			if (index_holder > (SAMPLES*2/3))
-				outColor_a = 'b11111100;
+				outColor_a = 'b11000000;
 			else
 			begin
 				if (index_holder < (SAMPLES*1/3))
-					outColor_a = 'b11000101;
+					outColor_a = 'b00101011;
 				else
-					outColor_a = 'b00111111; //'b00111111
+					outColor_a = 'b11111111; //'b00111111
 			end
 		end
 	end
