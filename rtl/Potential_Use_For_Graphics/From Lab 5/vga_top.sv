@@ -1,3 +1,13 @@
+/*
+Remaining Tasks
+1) Verify that the histogram is correct by having the microphone set up
+2) Ensure that the color determiner module is working correctly (there should be three possible colors)
+3) Have more colors in the color determiner module
+4) Have auto_win, input freeze_zombies, input gain_dominance, input kill_within_range, and input move_mine_to_player_location
+	determined by the heights of specific bins in the histogram (although the current implementation should remain in commented out form)
+5) Further cosmetic changes
+*/
+
 module vga_top #(parameter SAMPLES=16, WIDTH = 32)
 (
     input clk, input adc_clk,
