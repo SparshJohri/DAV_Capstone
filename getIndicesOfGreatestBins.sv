@@ -7,21 +7,21 @@ module getIndicesOfGreatestBins #(parameter SAMPLES=32, WIDTH=32)
 	input reset
 );
 
-	logic [$clog2(SAMPLES)-1:0] indexTracker = 0;
+	logic [$clog2(SAMPLES)-1:0] indexTracker = 1; //0
 
 	always @(posedge clk)
 	begin
 		if (reset)
 		begin
-			indexTracker <= 0;
+			indexTracker <= 1; //0
 			done <= 0;
 		end
 		
 		else
 		begin
-			if (indexTracker == 0)
+			if (indexTracker == 1)
 			begin
-				index_holder <= 0;
+				index_holder <= 1; //0
 				done <= 0;
 			end
 			
